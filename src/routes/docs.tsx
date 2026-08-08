@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { OFFICIAL_DOCS, SITE_LLMS } from "@/data/official-docs";
-import { BookOpen, ExternalLink, FileText, Sparkles } from "lucide-react";
+import { BookOpen, ExternalLink, FileText, Sparkles, Check } from "lucide-react";
 
 export const Route = createFileRoute("/docs")({
   component: DocsPage,
@@ -12,16 +12,14 @@ function DocsPage() {
       <header className="mb-6">
         <p className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-primary">
           <BookOpen className="h-3.5 w-3.5" />
-          官方文档
+          官方文档 · v2.1 迁移
         </p>
         <h1 className="mt-1 font-display text-2xl font-semibold text-fg sm:text-3xl">
-          不输官网的索引
+          官网有的，我们尽量都有
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted">
-          我们深入阅读了各工具官网，并探测了{" "}
-          <code className="font-mono text-primary">llms.txt</code> /{" "}
-          <code className="font-mono text-primary">llms-full.txt</code>
-          。课程内容对齐权威文档；此处集中入口，方便你与 AI 工具引用。
+          对照 Vitest/Camoufox <code className="text-primary">llms.txt</code>{" "}
+          与 Playwright/RTL 文档站目录，把原先缺失的专题迁入课程。每组下列出「已迁移课」可直达。
         </p>
       </header>
 
@@ -31,16 +29,7 @@ function DocsPage() {
           <div>
             <h2 className="text-sm font-semibold text-fg">本站 llms.txt</h2>
             <p className="mt-1 text-xs text-muted">
-              按{" "}
-              <a
-                href="https://llmstxt.org/"
-                className="text-primary no-underline hover:underline"
-                target="_blank"
-                rel="noreferrer"
-              >
-                llmstxt.org
-              </a>{" "}
-              约定提供，供 Cursor / Claude / 其他 agent 读取课程地图。
+              含完整课表与正文摘要，供 Cursor / Claude / 其他 agent 读取。
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <a
@@ -79,7 +68,12 @@ function DocsPage() {
                 </h2>
                 {group.track ? (
                   <span className="rounded-full bg-surface-3 px-2 py-0.5 text-[10px] text-muted">
-                    课程路径 · {group.track}
+                    {group.track}
+                  </span>
+                ) : null}
+                {group.migrated?.length ? (
+                  <span className="rounded-full bg-primary-soft px-2 py-0.5 text-[10px] text-primary">
+                    已迁移 {group.migrated.length} 课
                   </span>
                 ) : null}
                 <a
@@ -96,6 +90,29 @@ function DocsPage() {
                 {group.blurb}
               </p>
             </div>
+
+            {group.migrated && group.migrated.length > 0 ? (
+              <div className="border-b border-border px-4 py-3">
+                <p className="mb-2 text-[10px] font-medium uppercase tracking-wider text-subtle">
+                  本站课程（点进学习）
+                </p>
+                <ul className="flex flex-wrap gap-1.5">
+                  {group.migrated.map((slug) => (
+                    <li key={slug}>
+                      <Link
+                        to="/lesson/$slug"
+                        params={{ slug }}
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-bg px-2.5 py-1 text-[11px] text-fg no-underline hover:border-primary/40 hover:text-primary"
+                      >
+                        <Check className="h-3 w-3 text-primary" />
+                        {slug}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
             <ul className="divide-y divide-border">
               {group.links.map((link) => (
                 <li key={link.url}>
@@ -119,21 +136,6 @@ function DocsPage() {
           </section>
         ))}
       </div>
-
-      <p className="mt-8 text-center text-xs text-subtle">
-        课程讲解见{" "}
-        <Link to="/" className="text-primary no-underline hover:underline">
-          大纲
-        </Link>
-        ，速查见{" "}
-        <Link
-          to="/cheatsheet"
-          className="text-primary no-underline hover:underline"
-        >
-          速查表
-        </Link>
-        。
-      </p>
     </div>
   );
 }

@@ -68,7 +68,7 @@ function HomePage() {
           <div className="flex flex-wrap items-center gap-2">
             <p className="inline-flex items-center gap-1.5 rounded-full border border-border bg-bg/60 px-2.5 py-1 text-xs font-medium text-primary">
               <Sparkles className="h-3.5 w-3.5" />
-              v2 · 对齐官网 + llms.txt
+              v2.1 · 官网专题迁移
             </p>
             {streak > 0 ? (
               <span className="rounded-full bg-surface-3 px-2.5 py-1 font-mono text-xs text-muted">
@@ -80,22 +80,16 @@ function HomePage() {
             系统学前端测试
           </h1>
           <p className="mt-3 max-w-xl text-base leading-relaxed text-muted">
-            {LESSONS.length}{" "}
-            节课深入阅读 Vitest / Playwright / Testing Library / Defuddle / Camoufox
-            官方文档与 llms.txt，覆盖 Browser Mode、Agents、MCP、指纹与内容提取。
+            现共 <strong className="text-fg">{LESSONS.length}</strong>{" "}
+            节：从 Vitest llms.txt、Playwright 文档目录、RTL 指南与 Camoufox
+            指纹章节迁移的专题均已入库——过滤/Tags、Codegen、POM、Clock、分片、axe、GeoIP…
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <Link to="/docs" className="no-underline">
               <Button size="lg">
                 <Library className="h-4 w-4" />
-                官方文档索引
+                看迁移对照表
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/studio" className="no-underline">
-              <Button size="lg" variant="secondary">
-                <Terminal className="h-4 w-4" />
-                测试工坊
               </Button>
             </Link>
             <Link
@@ -107,10 +101,16 @@ function HomePage() {
                 {completed.length > 0 ? "继续学习" : "从第一节"}
               </Button>
             </Link>
+            <Link to="/studio" className="no-underline">
+              <Button size="lg" variant="ghost">
+                <Terminal className="h-4 w-4" />
+                工坊
+              </Button>
+            </Link>
             <Link to="/playground" className="no-underline">
               <Button size="lg" variant="ghost">
                 <Code2 className="h-4 w-4" />
-                断言沙盒
+                沙盒
               </Button>
             </Link>
             <Link to="/lab" className="no-underline">
@@ -122,7 +122,7 @@ function HomePage() {
             <Link to="/hub" className="no-underline">
               <Button size="lg" variant="ghost">
                 <LayoutDashboard className="h-4 w-4" />
-                学习中心
+                中心
               </Button>
             </Link>
           </div>
@@ -160,25 +160,25 @@ function HomePage() {
             to: "/docs" as const,
             icon: Library,
             title: "官方文档",
-            desc: "llms.txt 探测结果与外链",
+            desc: "迁移清单 + 外链 + llms",
           },
           {
             to: "/studio" as const,
             icon: Terminal,
             title: "测试工坊",
-            desc: "定位器、断言、flaky、合规",
+            desc: "定位器、断言、合规",
           },
           {
             to: "/cheatsheet" as const,
             icon: BookOpen,
             title: "速查表",
-            desc: "Vitest / RTL / PW 一页扫",
+            desc: "API 一页扫",
           },
           {
             to: "/playground" as const,
             icon: Code2,
             title: "断言沙盒",
-            desc: "即时验证 expect 直觉",
+            desc: "expect 直觉",
           },
         ].map((card) => (
           <Link
@@ -195,13 +195,15 @@ function HomePage() {
 
       <section className="mt-10">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="font-display text-lg font-semibold text-fg">课程大纲</h2>
+          <h2 className="font-display text-lg font-semibold text-fg">
+            课程大纲 · {LESSONS.length}
+          </h2>
           <div className="relative">
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-subtle" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="搜索课程…"
+              placeholder="搜索课程 / slug…"
               className="h-10 w-full rounded-md border border-border bg-surface pl-9 pr-3 text-sm text-fg placeholder:text-subtle sm:w-56"
             />
           </div>
@@ -221,6 +223,11 @@ function HomePage() {
               )}
             >
               {t}
+              {t !== "全部" ? (
+                <span className="ml-1 opacity-60">
+                  {getLessonsByTrack(t).length}
+                </span>
+              ) : null}
             </button>
           ))}
         </div>
@@ -268,6 +275,7 @@ function HomePage() {
                         {lesson.minutes} 分钟
                       </span>
                       <span>{lesson.level}</span>
+                      <span className="font-mono opacity-70">{lesson.slug}</span>
                       {score !== undefined ? (
                         <span className="font-mono text-primary">
                           测验 {score}%

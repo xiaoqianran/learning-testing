@@ -43,7 +43,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "前端测试中文交互教程 v2：Vitest（含 Browser Mode / llms.txt）、Testing Library、Playwright Agents/MCP、Puppeteer、Defuddle、Camoufox。讲解 + Demo + 测验 + 官方文档索引。",
+          "前端测试中文教程 v2.1：从 Vitest/Camoufox llms.txt 与 Playwright/RTL 官网目录迁移 79 节专题。含 Browser Mode、Codegen、POM、Clock、分片、axe、Defuddle、指纹。",
       },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "theme-color", content: "#0a0c10" },
@@ -142,7 +142,7 @@ function AppShell({ children }: { children: ReactNode }) {
               Learning Testing
             </span>
             <span className="hidden rounded-full bg-surface-3 px-1.5 py-0.5 font-mono text-[10px] text-primary sm:inline">
-              v2
+              v2.1
             </span>
           </Link>
 
@@ -249,7 +249,7 @@ function AppShell({ children }: { children: ReactNode }) {
 
             <div className="mt-6 flex items-center gap-2 px-2 text-xs text-subtle">
               <BookOpen className="h-3.5 w-3.5" />
-              本地进度 · 对齐官网
+              官网专题已迁移
             </div>
           </nav>
         </aside>

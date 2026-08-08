@@ -1,4 +1,5 @@
 import { EXTRA_LESSONS } from "./lessons-extra";
+import { MIGRATED_LESSONS } from "./lessons-migrated";
 import { CORE_LESSONS } from "./lessons-core";
 import type { Lesson, Track, QuizQuestion, DemoKind, LessonBlock } from "./lessons-types";
 
@@ -14,16 +15,26 @@ export const TRACKS: Track[] = [
   "工程化",
 ];
 
-/** 按路径合并：核心课在前，扩展课接在同路径之后 */
-function mergeLessons(core: Lesson[], extra: Lesson[]): Lesson[] {
+/** 按路径合并：核心 → 扩展 → 官网迁移专题 */
+function mergeLessons(...groups: Lesson[][]): Lesson[] {
   const buckets = new Map<Track, Lesson[]>();
   for (const t of TRACKS) buckets.set(t, []);
-  for (const l of core) buckets.get(l.track)!.push(l);
-  for (const l of extra) buckets.get(l.track)!.push(l);
+  const seen = new Set<string>();
+  for (const group of groups) {
+    for (const l of group) {
+      if (seen.has(l.slug)) continue;
+      seen.add(l.slug);
+      buckets.get(l.track)!.push(l);
+    }
+  }
   return TRACKS.flatMap((t) => buckets.get(t) ?? []);
 }
 
-export const LESSONS: Lesson[] = mergeLessons(CORE_LESSONS, EXTRA_LESSONS);
+export const LESSONS: Lesson[] = mergeLessons(
+  CORE_LESSONS,
+  EXTRA_LESSONS,
+  MIGRATED_LESSONS,
+);
 
 export function getLesson(slug: string) {
   return LESSONS.find((l) => l.slug === slug);
