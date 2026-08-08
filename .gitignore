@@ -15,3 +15,10 @@ playwright-report
 test-results
 /tmp
 *.log
+
+# sandbox / agent
+.grok/
+.node_modules.lock
+screenshots/*.png
+artifacts/
+.vercel/

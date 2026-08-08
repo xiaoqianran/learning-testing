@@ -14,10 +14,51 @@ const isGitHubPages =
 /** Project Pages site: https://xiaoqianran.github.io/learning-testing/ */
 const base = isGitHubPages ? "/learning-testing/" : "/";
 
+const lessonSlugs = [
+  "why-test",
+  "test-pyramid",
+  "aaa-pattern",
+  "first-principles",
+  "vitest-intro",
+  "vitest-expect",
+  "vitest-mock",
+  "vitest-async",
+  "vitest-coverage",
+  "rtl-intro",
+  "rtl-queries",
+  "rtl-user-event",
+  "rtl-async",
+  "pw-intro",
+  "pw-locators",
+  "pw-assertions",
+  "pw-network",
+  "pw-debug",
+  "puppeteer-intro",
+  "puppeteer-vs-pw",
+  "defuddle",
+  "camoufox",
+  "stealth-ethics",
+  "flaky-tests",
+  "ci-testing",
+  "test-strategy",
+  "interview-testing",
+];
+
+const staticPages = [
+  { path: "/" },
+  { path: "/hub" },
+  { path: "/lab" },
+  { path: "/mistakes" },
+  { path: "/certificate" },
+  { path: "/playground" },
+  { path: "/studio" },
+  { path: "/cheatsheet" },
+  { path: "/login" },
+  ...lessonSlugs.map((slug) => ({ path: `/lesson/${slug}` })),
+];
+
 /**
- * Finish PGLite bootstrap during dev-server setup (before traffic). Vite awaits
- * async `configureServer` hooks. Production: `src/lib/db` kicks `ensureDbReady`
- * on import.
+ * Finish PGLite bootstrap during dev-server setup (before traffic).
  */
 function pgliteBootstrapPlugin(): Plugin {
   return {
@@ -39,10 +80,6 @@ function pgliteBootstrapPlugin(): Plugin {
   };
 }
 
-/**
- * Live-preview OAuth popup — handled HERE so the agent never has to create a
- * `/auth/popup` route.
- */
 function authPopupPlugin(): Plugin {
   return {
     name: "app-builder:auth-popup",
@@ -122,9 +159,8 @@ function authPopupPlugin(): Plugin {
   };
 }
 
-// `0.0.0.0:8080` is the live-preview contract — don't change host/port.
-// Keep `nitro` gated to `build` (the Vercel deploy target): enabled in dev it
-// opens a second dev-server port, which breaks the single-port preview.
+// GitHub Pages: SPA + prerender, no Nitro.
+// Vercel deploy: Nitro vercel preset (only when not building for Pages).
 export default defineConfig(({ command }) => ({
   base,
   server: {
@@ -138,11 +174,24 @@ export default defineConfig(({ command }) => ({
     authPopupPlugin(),
     grokPwaPlugin(),
     tailwindcss(),
-    tanstackStart(),
-    ...(command === "build"
+    tanstackStart(
+      isGitHubPages
+        ? {
+            spa: { enabled: true },
+            prerender: {
+              enabled: true,
+              crawlLinks: true,
+              autoStaticPathsDiscovery: true,
+              failOnError: false,
+            },
+            pages: staticPages,
+          }
+        : undefined,
+    ),
+    ...(command === "build" && !isGitHubPages
       ? [
           nitro({
-            preset: isGitHubPages ? "github_pages" : "vercel",
+            preset: "vercel",
             serverDir: "./server",
           }),
         ]

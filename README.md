@@ -2,6 +2,9 @@
 
 交互式中文测试教程：课程 + 测验 + 进度 + 断言沙盒 + 测试工坊。
 
+**在线访问：** [https://xiaoqianran.github.io/learning-testing/](https://xiaoqianran.github.io/learning-testing/)  
+**仓库：** [https://github.com/xiaoqianran/learning-testing](https://github.com/xiaoqianran/learning-testing)
+
 姊妹项目：[learning-vue3](https://github.com/xiaoqianran/learning-vue3)
 
 ---
