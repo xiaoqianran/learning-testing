@@ -116,7 +116,7 @@ function CheatsheetPage() {
         </h1>
         <p className="mt-2 text-sm text-muted">
           对齐各官网 API。详细讲解见课程；外链总表见{" "}
-          <Link to="/docs" className="text-primary no-underline hover:underline">
+          <Link to={"/docs" as any} className="text-primary no-underline hover:underline">
             官方文档
           </Link>
           ；闯关见{" "}

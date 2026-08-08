@@ -20,7 +20,6 @@ import { Route as MistakesRouteImport } from './routes/mistakes'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as StudioRouteImport } from './routes/studio'
 import { Route as LessonSlugRouteImport } from './routes/lesson.$slug'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,11 +76,6 @@ const LessonSlugRoute = LessonSlugRouteImport.update({
   path: '/lesson/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -95,7 +89,6 @@ export interface FileRoutesByFullPath {
   '/playground': typeof PlaygroundRoute
   '/studio': typeof StudioRoute
   '/lesson/$slug': typeof LessonSlugRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -109,7 +102,6 @@ export interface FileRoutesByTo {
   '/playground': typeof PlaygroundRoute
   '/studio': typeof StudioRoute
   '/lesson/$slug': typeof LessonSlugRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -124,7 +116,6 @@ export interface FileRoutesById {
   '/playground': typeof PlaygroundRoute
   '/studio': typeof StudioRoute
   '/lesson/$slug': typeof LessonSlugRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -140,7 +131,6 @@ export interface FileRouteTypes {
     | '/playground'
     | '/studio'
     | '/lesson/$slug'
-    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -154,7 +144,6 @@ export interface FileRouteTypes {
     | '/playground'
     | '/studio'
     | '/lesson/$slug'
-    | '/api/auth/$'
   id:
     | '__root__'
     | '/'
@@ -168,7 +157,6 @@ export interface FileRouteTypes {
     | '/playground'
     | '/studio'
     | '/lesson/$slug'
-    | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -183,7 +171,6 @@ export interface RootRouteChildren {
   PlaygroundRoute: typeof PlaygroundRoute
   StudioRoute: typeof StudioRoute
   LessonSlugRoute: typeof LessonSlugRoute
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -265,13 +252,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LessonSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -287,7 +267,6 @@ const rootRouteChildren: RootRouteChildren = {
   PlaygroundRoute: PlaygroundRoute,
   StudioRoute: StudioRoute,
   LessonSlugRoute: LessonSlugRoute,
-  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
