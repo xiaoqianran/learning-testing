@@ -14,6 +14,7 @@ import {
   LayoutDashboard,
   Code2,
   Terminal,
+  Library,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMemo, useState } from "react";
@@ -67,7 +68,7 @@ function HomePage() {
           <div className="flex flex-wrap items-center gap-2">
             <p className="inline-flex items-center gap-1.5 rounded-full border border-border bg-bg/60 px-2.5 py-1 text-xs font-medium text-primary">
               <Sparkles className="h-3.5 w-3.5" />
-              v1 · 测试全栈路径
+              v2 · 对齐官网 + llms.txt
             </p>
             {streak > 0 ? (
               <span className="rounded-full bg-surface-3 px-2.5 py-1 font-mono text-xs text-muted">
@@ -79,14 +80,22 @@ function HomePage() {
             系统学前端测试
           </h1>
           <p className="mt-3 max-w-xl text-base leading-relaxed text-muted">
-            参考 learning-vue3 的交互课形态：讲解 + 源码 + 动手 Demo +
-            测验。覆盖 Vitest、Testing Library、Playwright、Puppeteer、Defuddle、Camoufox。
+            {LESSONS.length}{" "}
+            节课深入阅读 Vitest / Playwright / Testing Library / Defuddle / Camoufox
+            官方文档与 llms.txt，覆盖 Browser Mode、Agents、MCP、指纹与内容提取。
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <Link to="/studio" className="no-underline">
+            <Link to="/docs" className="no-underline">
               <Button size="lg">
-                打开测试工坊
+                <Library className="h-4 w-4" />
+                官方文档索引
                 <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/studio" className="no-underline">
+              <Button size="lg" variant="secondary">
+                <Terminal className="h-4 w-4" />
+                测试工坊
               </Button>
             </Link>
             <Link
@@ -99,7 +108,7 @@ function HomePage() {
               </Button>
             </Link>
             <Link to="/playground" className="no-underline">
-              <Button size="lg" variant="secondary">
+              <Button size="lg" variant="ghost">
                 <Code2 className="h-4 w-4" />
                 断言沙盒
               </Button>
@@ -145,19 +154,25 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="mt-8 grid gap-3 sm:grid-cols-3">
+      <section className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
+          {
+            to: "/docs" as const,
+            icon: Library,
+            title: "官方文档",
+            desc: "llms.txt 探测结果与外链",
+          },
           {
             to: "/studio" as const,
             icon: Terminal,
             title: "测试工坊",
-            desc: "闯关：定位器、断言、flaky、mock",
+            desc: "定位器、断言、flaky、合规",
           },
           {
             to: "/cheatsheet" as const,
             icon: BookOpen,
             title: "速查表",
-            desc: "Vitest / RTL / Playwright 一页扫",
+            desc: "Vitest / RTL / PW 一页扫",
           },
           {
             to: "/playground" as const,
@@ -230,7 +245,11 @@ function HomePage() {
                         : "bg-surface-3 text-muted",
                     )}
                   >
-                    {done ? <Check className="h-4 w-4" /> : LESSONS.indexOf(lesson) + 1}
+                    {done ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      LESSONS.indexOf(lesson) + 1
+                    )}
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
@@ -250,7 +269,9 @@ function HomePage() {
                       </span>
                       <span>{lesson.level}</span>
                       {score !== undefined ? (
-                        <span className="font-mono text-primary">测验 {score}%</span>
+                        <span className="font-mono text-primary">
+                          测验 {score}%
+                        </span>
                       ) : null}
                     </div>
                   </div>

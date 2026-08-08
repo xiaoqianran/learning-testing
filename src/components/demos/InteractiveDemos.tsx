@@ -162,7 +162,7 @@ function AaaDemo() {
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted">把每行代码拖到对应的 AAA 阶段（点选匹配）。</p>
+      <p className="text-sm text-muted">把每行代码点选到对应的 AAA 阶段。</p>
       {parts.map((p) => (
         <div
           key={p.id}
@@ -265,17 +265,10 @@ function MockDemo() {
         mock；断言应 toHaveBeenCalledTimes(1)。
       </p>
       <div className="flex flex-wrap gap-2">
-        <Button
-          size="sm"
-          onClick={() => setCalls((c) => c + 1)}
-        >
+        <Button size="sm" onClick={() => setCalls((c) => c + 1)}>
           调用业务 loadProfile
         </Button>
-        <Button
-          size="sm"
-          variant="secondary"
-          onClick={() => setAsserted(true)}
-        >
+        <Button size="sm" variant="secondary" onClick={() => setAsserted(true)}>
           运行 expect(spy).toHaveBeenCalledTimes(1)
         </Button>
         <Button
@@ -386,11 +379,7 @@ function RtlUserDemo() {
           className="mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm text-fg"
         />
       </label>
-      <Button
-        size="sm"
-        disabled={!valid}
-        onClick={() => setSubmitted(true)}
-      >
+      <Button size="sm" disabled={!valid} onClick={() => setSubmitted(true)}>
         登录
       </Button>
       {submitted ? (
@@ -466,7 +455,13 @@ function AssertDemo() {
       ))}
       <Result
         ok={pick === null ? null : pick === 1}
-        text={pick === 1 ? "正确：expect(locator) 会重试。" : pick === 0 ? "一次性取值易 flaky。" : ""}
+        text={
+          pick === 1
+            ? "正确：expect(locator) 会重试。"
+            : pick === 0
+              ? "一次性取值易 flaky。"
+              : ""
+        }
       />
     </div>
   );
@@ -506,12 +501,7 @@ function PuppeteerDemo() {
       {complete ? (
         <p className="mt-2 text-sm text-pass">脚本跑通：浏览器启动 → 截图 → 关闭。</p>
       ) : (
-        <Button
-          className="mt-2"
-          size="sm"
-          variant="ghost"
-          onClick={() => setDone([])}
-        >
+        <Button className="mt-2" size="sm" variant="ghost" onClick={() => setDone([])}>
           重置
         </Button>
       )}
@@ -522,24 +512,28 @@ function PuppeteerDemo() {
 function DefuddleDemo() {
   const raw = useMemo(
     () =>
-      `<nav>广告 | 登录</nav><article><h1>Q2 报告</h1><p>营收增长 12%。</p></article><footer>Cookie 同意</footer>`,
+      `<nav>广告 | 登录</nav><article><h1>Q2 报告</h1><p>营收增长 12%。</p><p>By Ada</p></article><footer>Cookie</footer>`,
     [],
   );
   const [extracted, setExtracted] = useState(false);
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted">模拟从嘈杂 HTML 提取正文。</p>
+      <p className="text-sm text-muted">
+        对齐官方 API：<code className="text-primary">new Defuddle(document).parse()</code>
+      </p>
       <pre className="scrollbar-thin overflow-x-auto rounded-md bg-code-bg p-3 font-mono text-[11px] text-code-fg">
         {raw}
       </pre>
       <Button size="sm" onClick={() => setExtracted(true)}>
-        运行 defuddle(html)
+        parse()
       </Button>
       {extracted ? (
         <div className="rounded-md border border-primary/30 bg-primary-soft p-3 text-sm">
-          <p className="font-medium text-primary">title: Q2 报告</p>
-          <p className="mt-1 text-fg">content: 营收增长 12%。</p>
-          <p className="mt-2 text-xs text-muted">导航与页脚噪声已剥离</p>
+          <p className="font-mono text-xs text-muted">result =</p>
+          <p className="mt-1 font-medium text-primary">title: "Q2 报告"</p>
+          <p className="text-fg">author: "Ada"</p>
+          <p className="text-fg">content: "营收增长 12%。"</p>
+          <p className="mt-2 text-xs text-muted">导航/页脚已剥离 · 可 markdown: true</p>
         </div>
       ) : null}
     </div>
@@ -548,16 +542,17 @@ function DefuddleDemo() {
 
 function CamoufoxDemo() {
   const signals = [
-    { k: "navigator.webdriver", stock: "true", stealth: "false" },
-    { k: "User-Agent", stock: "HeadlessChrome", stealth: "真实桌面 UA" },
-    { k: "WebGL vendor", stock: "Google SwiftShader", stealth: "类真机 GPU" },
+    { k: "navigator.webdriver", stock: "true", stealth: "false（C++ 层）" },
+    { k: "User-Agent", stock: "HeadlessChrome", stealth: "真实 Firefox 分布" },
+    { k: "WebGL vendor", stock: "SwiftShader", stealth: "类真机 GPU 参数" },
+    { k: "WebRTC IP", stock: "真实出口泄露", stealth: "ICE/SDP 协议层伪装" },
   ];
   const [mode, setMode] = useState<"stock" | "stealth">("stock");
 
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted">
-        对比普通自动化浏览器与 Camoufox 类方案的指纹信号（示意）。
+        对照官网 stealth：指纹在 C++ 注入，非页面 JS polyfill。
       </p>
       <div className="flex gap-2">
         <Button
@@ -565,14 +560,14 @@ function CamoufoxDemo() {
           variant={mode === "stock" ? "default" : "secondary"}
           onClick={() => setMode("stock")}
         >
-          普通 Headless
+          普通自动化
         </Button>
         <Button
           size="sm"
           variant={mode === "stealth" ? "default" : "secondary"}
           onClick={() => setMode("stealth")}
         >
-          Camoufox 向
+          Camoufox
         </Button>
       </div>
       <ul className="divide-y divide-border rounded-lg border border-border">
@@ -589,7 +584,7 @@ function CamoufoxDemo() {
         ))}
       </ul>
       <p className="text-xs text-subtle">
-        仅用于测试自有风控与授权场景，勿滥用。
+        合法用途：自有风控测试 / 授权采集。见 camoufox.com/legal.md
       </p>
     </div>
   );
@@ -629,7 +624,11 @@ function CoverageDemo() {
 function FlakyDemo() {
   const items = [
     { id: "sleep", text: "await page.waitForTimeout(3000)", bad: true },
-    { id: "expect", text: "await expect(page.getByText('已保存')).toBeVisible()", bad: false },
+    {
+      id: "expect",
+      text: "await expect(page.getByText('已保存')).toBeVisible()",
+      bad: false,
+    },
     { id: "shared", text: "测试共用同一个可写全局 DB 行且不清理", bad: true },
   ];
   const [marked, setMarked] = useState<Record<string, boolean>>({});

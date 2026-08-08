@@ -1,0 +1,101 @@
+# Learning Testing
+
+> 前端测试中文交互教程：Vitest / Testing Library / Playwright / Puppeteer / Defuddle / Camoufox
+> 对齐官方文档与 llms.txt；课程 + Demo + 测验 + 工坊
+
+本站在线：https://xiaoqianran.github.io/learning-testing/
+
+## 本站入口
+
+- [课程大纲](https://xiaoqianran.github.io/learning-testing/): 搜索、路径筛选、进度
+- [测试工坊](https://xiaoqianran.github.io/learning-testing/studio): 闯关实战
+- [断言沙盒](https://xiaoqianran.github.io/learning-testing/playground): expect 直觉
+- [官方文档索引](https://xiaoqianran.github.io/learning-testing/docs): 各工具官网与 llms.txt
+- [速查表](https://xiaoqianran.github.io/learning-testing/cheatsheet)
+- [学习中心](https://xiaoqianran.github.io/learning-testing/hub)
+- [练习场](https://xiaoqianran.github.io/learning-testing/lab)
+- [错题本](https://xiaoqianran.github.io/learning-testing/mistakes)
+- [结业](https://xiaoqianran.github.io/learning-testing/certificate)
+- [llms-full.txt](https://xiaoqianran.github.io/learning-testing/llms-full.txt): 课程全文摘要
+
+## 官方 llms.txt（我们已探测）
+
+- [Vitest llms.txt](https://vitest.dev/llms.txt)
+- [Vitest llms-full.txt](https://vitest.dev/llms-full.txt)
+- [Vite llms.txt](https://vite.dev/llms.txt)
+- [Camoufox llms.txt](https://camoufox.com/llms.txt)
+- Playwright / Testing Library / Puppeteer：暂无根路径 llms.txt，见官方文档站与 /docs 页
+
+## 课程（45 节）
+
+### 基础概念
+
+- [为什么要写测试](https://xiaoqianran.github.io/learning-testing/lesson/why-test/): 测试的价值、成本与何时值得投入。 (入门, 6min)
+- [测试金字塔](https://xiaoqianran.github.io/learning-testing/lesson/test-pyramid/): 单元 / 集成 / E2E 的配比与选择。 (入门, 8min)
+- [AAA 模式](https://xiaoqianran.github.io/learning-testing/lesson/aaa-pattern/): Arrange · Act · Assert 写清晰用例。 (入门, 7min)
+- [好测试的原则](https://xiaoqianran.github.io/learning-testing/lesson/first-principles/): 独立、可重复、快速、有意义的失败信息。 (入门, 8min)
+
+### Vitest
+
+- [Vitest 入门](https://xiaoqianran.github.io/learning-testing/lesson/vitest-intro/): 与 Vite 同构的现代测试运行器。 (入门, 8min)
+- [断言与匹配器](https://xiaoqianran.github.io/learning-testing/lesson/vitest-expect/): toBe、toEqual、toMatchObject 等常用 API。 (入门, 9min)
+- [Mock 与 Spy](https://xiaoqianran.github.io/learning-testing/lesson/vitest-mock/): vi.fn、vi.spyOn、vi.mock 隔离依赖。 (进阶, 10min)
+- [异步与定时器](https://xiaoqianran.github.io/learning-testing/lesson/vitest-async/): async/await、fake timers、waitFor。 (进阶, 9min)
+- [覆盖率怎么读](https://xiaoqianran.github.io/learning-testing/lesson/vitest-coverage/): 行/分支覆盖率的意义与陷阱。 (进阶, 8min)
+- [Vitest 配置与 CLI](https://xiaoqianran.github.io/learning-testing/lesson/vitest-config/): defineConfig、environment、pool、CLI 过滤与 UI。 (进阶, 10min)
+- [Setup / Hooks / 生命周期](https://xiaoqianran.github.io/learning-testing/lesson/vitest-setup-hooks/): beforeEach、afterEach、setupFiles、globalSetup。 (进阶, 8min)
+- [Snapshot 测试](https://xiaoqianran.github.io/learning-testing/lesson/vitest-snapshot/): toMatchSnapshot、inline、更新策略与评审。 (进阶, 9min)
+- [Browser Mode 真浏览器](https://xiaoqianran.github.io/learning-testing/lesson/vitest-browser-mode/): provider Playwright/WebdriverIO、组件测、视觉回归。 (实战, 12min)
+- [Projects 与类型测试](https://xiaoqianran.github.io/learning-testing/lesson/vitest-projects-types/): 多项目配置、expectTypeOf / assertType。 (实战, 9min)
+- [Mock 矩阵：日期/模块/请求/FS](https://xiaoqianran.github.io/learning-testing/lesson/vitest-mocking-matrix/): 对齐官方 mocking 分册：dates、modules、requests、fs。 (实战, 11min)
+
+### Testing Library
+
+- [Testing Library 理念](https://xiaoqianran.github.io/learning-testing/lesson/rtl-intro/): 按用户使用方式查询与交互。 (入门, 8min)
+- [查询优先级](https://xiaoqianran.github.io/learning-testing/lesson/rtl-queries/): get/find/query 与 ByRole 家族。 (入门, 9min)
+- [user-event 交互](https://xiaoqianran.github.io/learning-testing/lesson/rtl-user-event/): 点击、输入、键盘——更接近真实用户。 (进阶, 9min)
+- [异步 UI 与 waitFor](https://xiaoqianran.github.io/learning-testing/lesson/rtl-async/): 加载态、请求后更新、act 警告处理。 (进阶, 8min)
+- [Which Query 完整优先级](https://xiaoqianran.github.io/learning-testing/lesson/rtl-which-query/): 官方推荐顺序：Role → Label → Placeholder → Text → DisplayValue → Alt → Title → TestId。 (进阶, 10min)
+- [可访问性与 Role](https://xiaoqianran.github.io/learning-testing/lesson/rtl-a11y/): name、hidden、level、jest-dom 匹配器。 (进阶, 8min)
+- [多框架与 MSW](https://xiaoqianran.github.io/learning-testing/lesson/rtl-frameworks/): React/Vue 包装差异；MSW 拦网络。 (实战, 9min)
+
+### Playwright
+
+- [Playwright 入门](https://xiaoqianran.github.io/learning-testing/lesson/pw-intro/): 现代 E2E：多浏览器、自动等待、强断言。 (入门, 9min)
+- [Locator 策略](https://xiaoqianran.github.io/learning-testing/lesson/pw-locators/): getByRole 优先，避免脆弱 CSS。 (入门, 10min)
+- [Web-First 断言](https://xiaoqianran.github.io/learning-testing/lesson/pw-assertions/): expect(locator).toBeVisible 等自动重试断言。 (进阶, 9min)
+- [网络拦截与 Fixture](https://xiaoqianran.github.io/learning-testing/lesson/pw-network/): route、storageState、项目配置。 (进阶, 10min)
+- [调试 Trace 与 UI Mode](https://xiaoqianran.github.io/learning-testing/lesson/pw-debug/): 失败可回放：trace、headed、codegen。 (实战, 8min)
+- [Fixtures 与 test.extend](https://xiaoqianran.github.io/learning-testing/lesson/pw-fixtures/): 内置 page/context；自定义 fixture 与作用域。 (进阶, 10min)
+- [登录态与 storageState](https://xiaoqianran.github.io/learning-testing/lesson/pw-auth/): global setup 登录一次，多测复用 cookie。 (实战, 9min)
+- [API 测试与视觉对比](https://xiaoqianran.github.io/learning-testing/lesson/pw-api-visual/): request fixture；toHaveScreenshot。 (实战, 10min)
+- [Test Agents 与 MCP](https://xiaoqianran.github.io/learning-testing/lesson/pw-agents-mcp/): planner / generator / healer；Playwright MCP。 (实战, 10min)
+- [Playwright 最佳实践](https://xiaoqianran.github.io/learning-testing/lesson/pw-best-practices/): 官方 best-practices：隔离、定位、断言、测试独立性。 (实战, 8min)
+
+### Puppeteer
+
+- [Puppeteer 基础](https://xiaoqianran.github.io/learning-testing/lesson/puppeteer-intro/): Chrome DevTools Protocol 控制浏览器。 (入门, 9min)
+- [Puppeteer vs Playwright](https://xiaoqianran.github.io/learning-testing/lesson/puppeteer-vs-pw/): 选型对照：场景、生态、API。 (进阶, 8min)
+- [BiDi 与 WebMCP](https://xiaoqianran.github.io/learning-testing/lesson/puppeteer-bidi-webmcp/): WebDriver BiDi；实验性 WebMCP 工具发现与调用。 (实战, 9min)
+
+### 高级工具
+
+- [Defuddle 内容提取](https://xiaoqianran.github.io/learning-testing/lesson/defuddle/): 从杂乱 HTML 抽取可读正文，服务测试与数据管线。 (进阶, 9min)
+- [Camoufox 反检测浏览器](https://xiaoqianran.github.io/learning-testing/lesson/camoufox/): 指纹伪装与自动化隐身场景（合法用途）。 (实战, 10min)
+- [自动化伦理与边界](https://xiaoqianran.github.io/learning-testing/lesson/stealth-ethics/): robots、授权、速率与数据合规。 (进阶, 7min)
+- [Defuddle 官方 API](https://xiaoqianran.github.io/learning-testing/lesson/defuddle-api/): Browser / Node / CLI；Markdown 与元数据。 (进阶, 10min)
+- [Camoufox Python + Playwright](https://xiaoqianran.github.io/learning-testing/lesson/camoufox-python/): 官方库：指纹注入、GeoIP、与 Playwright 代码兼容。 (实战, 12min)
+
+### 工程化
+
+- [消灭 Flaky](https://xiaoqianran.github.io/learning-testing/lesson/flaky-tests/): 偶发失败的根因与治理。 (实战, 10min)
+- [CI 中的测试](https://xiaoqianran.github.io/learning-testing/lesson/ci-testing/): GitHub Actions、并行、缓存、分片。 (实战, 10min)
+- [团队测试策略](https://xiaoqianran.github.io/learning-testing/lesson/test-strategy/): 谁写测、何时写、Definition of Done。 (实战, 8min)
+- [测试面试串讲](https://xiaoqianran.github.io/learning-testing/lesson/interview-testing/): 高频问答：金字塔、mock、E2E、flaky。 (实战, 10min)
+- [llms.txt 与测试文档](https://xiaoqianran.github.io/learning-testing/lesson/llms-txt-for-testers/): 如何用官方 llms.txt 喂给 AI；本站也提供索引。 (进阶, 8min)
+
+## Optional
+
+- [规范 llmstxt.org](https://llmstxt.org/)
+- [姊妹项目 learning-vue3](https://github.com/xiaoqianran/learning-vue3)
+- [本仓库](https://github.com/xiaoqianran/learning-testing)

@@ -15,7 +15,7 @@
 
 你可以：
 
-- 按路径学完 **24+ 节** 课程（讲解 + 源码 + 交互 Demo + 小测验）
+- 按路径学完 **45 节** 课程（讲解 + 源码 + 交互 Demo + 小测验）
 - 在 **断言沙盒** 里即时验证 `expect` 直觉
 - 在 **测试工坊** 里闯关（定位器 / 断言 / mock / flaky / 合规）
 - 用 **速查表** 复习，用 **学习中心 / 错题本 / 结业证明** 跟进度
@@ -35,6 +35,12 @@
 
 ---
 
+## v2 亮点
+
+- 深入阅读官方文档；探测 **Vitest / Vite / Camoufox `llms.txt`**
+- 新增 **官方文档** 页、本站 `/llms.txt` 与 `/llms-full.txt`
+- 扩展课：Browser Mode、Snapshot、Projects、Fixtures、Agents/MCP、Defuddle 官方 API、Camoufox Python 等
+
 ## 功能一览
 
 | 模块 | 路径 | 说明 |
@@ -48,6 +54,8 @@
 | 练习场 | `/lab` | 综合抽题 |
 | 错题本 | `/mistakes` | 测验错题回顾 |
 | 结业证明 | `/certificate` | 全部完成后解锁 |
+| 官方文档 | `/docs` | 官网 + llms.txt 索引 |
+| 本站 llms | `/llms.txt` | AI 可读课程地图 |
 
 ---
 

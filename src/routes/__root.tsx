@@ -18,6 +18,7 @@ import {
   Code2,
   Terminal,
   BookMarked,
+  Library,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -42,7 +43,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "前端测试中文交互教程：Vitest、Testing Library、Playwright、Puppeteer、Defuddle、Camoufox。讲解 + Demo + 测验 + 工坊。",
+          "前端测试中文交互教程 v2：Vitest（含 Browser Mode / llms.txt）、Testing Library、Playwright Agents/MCP、Puppeteer、Defuddle、Camoufox。讲解 + Demo + 测验 + 官方文档索引。",
       },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "theme-color", content: "#0a0c10" },
@@ -63,6 +64,7 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap",
       },
+      { rel: "alternate", type: "text/plain", href: "/llms.txt", title: "llms.txt" },
     ],
   }),
   component: RootComponent,
@@ -95,6 +97,7 @@ function RootDocument({ children }: { children: ReactNode }) {
 
 const NAV_EXTRA = [
   { to: "/studio" as const, label: "测试工坊", icon: Terminal },
+  { to: "/docs" as const, label: "官方文档", icon: Library },
   { to: "/cheatsheet" as const, label: "速查表", icon: BookMarked },
   { to: "/playground" as const, label: "断言沙盒", icon: Code2 },
   { to: "/hub" as const, label: "学习中心", icon: LayoutDashboard },
@@ -139,7 +142,7 @@ function AppShell({ children }: { children: ReactNode }) {
               Learning Testing
             </span>
             <span className="hidden rounded-full bg-surface-3 px-1.5 py-0.5 font-mono text-[10px] text-primary sm:inline">
-              v1
+              v2
             </span>
           </Link>
 
@@ -208,7 +211,7 @@ function AppShell({ children }: { children: ReactNode }) {
             </ul>
 
             <p className="mb-2 px-2 text-xs font-medium uppercase tracking-wider text-subtle">
-              课程目录
+              课程目录 · {LESSONS.length} 节
             </p>
             <ul className="flex flex-col gap-0.5">
               {LESSONS.map((lesson, i) => {
@@ -246,7 +249,7 @@ function AppShell({ children }: { children: ReactNode }) {
 
             <div className="mt-6 flex items-center gap-2 px-2 text-xs text-subtle">
               <BookOpen className="h-3.5 w-3.5" />
-              {LESSONS.length} 节 · 本地进度
+              本地进度 · 对齐官网
             </div>
           </nav>
         </aside>

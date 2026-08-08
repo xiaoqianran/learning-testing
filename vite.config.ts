@@ -42,6 +42,24 @@ const lessonSlugs = [
   "ci-testing",
   "test-strategy",
   "interview-testing",
+  "vitest-config",
+  "vitest-setup-hooks",
+  "vitest-snapshot",
+  "vitest-browser-mode",
+  "vitest-projects-types",
+  "vitest-mocking-matrix",
+  "rtl-which-query",
+  "rtl-a11y",
+  "rtl-frameworks",
+  "pw-fixtures",
+  "pw-auth",
+  "pw-api-visual",
+  "pw-agents-mcp",
+  "pw-best-practices",
+  "puppeteer-bidi-webmcp",
+  "defuddle-api",
+  "camoufox-python",
+  "llms-txt-for-testers",
 ];
 
 const staticPages = [
@@ -54,6 +72,7 @@ const staticPages = [
   { path: "/studio" },
   { path: "/cheatsheet" },
   { path: "/login" },
+  { path: "/docs" },
   ...lessonSlugs.map((slug) => ({ path: `/lesson/${slug}` })),
 ];
 
