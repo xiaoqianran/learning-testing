@@ -71,9 +71,12 @@ export function Quiz({
       <div className="mb-4 flex items-end justify-between gap-3">
         <div>
           <p className="text-xs font-medium uppercase tracking-wider text-primary">
-            小测验
+            小测验 · 讲明白了吗
           </p>
           <h3 className="font-display text-lg font-semibold">检验一下</h3>
+          <p className="mt-1 text-xs text-muted">
+            答完看解析——解析比对错更重要。
+          </p>
         </div>
         {submitted ? (
           <p className="font-mono text-sm tabular-nums text-muted">
@@ -121,25 +124,45 @@ export function Quiz({
                         stateClass,
                       )}
                     >
+                      <span className="mr-2 font-mono text-[10px] text-subtle">
+                        {String.fromCharCode(65 + oi)}.
+                      </span>
                       {opt}
                     </button>
                   );
                 })}
               </div>
               {submitted ? (
-                <p
+                <div
                   className={cn(
-                    "mt-2 flex items-start gap-1.5 text-xs",
-                    correct ? "text-primary" : "text-warn",
+                    "mt-2 rounded-md border px-3 py-2 text-xs leading-relaxed",
+                    correct
+                      ? "border-primary/30 bg-primary-soft/50 text-fg"
+                      : "border-warn/30 bg-warn/10 text-fg",
                   )}
                 >
-                  {correct ? (
-                    <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                  ) : (
-                    <XCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                  )}
-                  {q.explain}
-                </p>
+                  <p className="flex items-start gap-1.5 font-medium">
+                    {correct ? (
+                      <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                    ) : (
+                      <XCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warn" />
+                    )}
+                    {correct ? "正确" : "再想一下"}
+                  </p>
+                  <p className="mt-1 pl-5 text-muted">
+                    <span className="text-fg">解析：</span>
+                    {q.explain}
+                  </p>
+                  {!correct ? (
+                    <p className="mt-1 pl-5 text-muted">
+                      正确答案是{" "}
+                      <span className="font-mono text-primary">
+                        {String.fromCharCode(65 + q.answer)}.{" "}
+                        {q.options[q.answer]}
+                      </span>
+                    </p>
+                  ) : null}
+                </div>
               ) : null}
             </div>
           );
@@ -162,7 +185,7 @@ export function Quiz({
               </span>
             ) : (
               <span className="inline-flex items-center text-sm text-muted">
-                错题已收入错题本
+                错题已收入错题本 · 建议重读「易错点」
               </span>
             )}
           </>

@@ -68,7 +68,7 @@ function HomePage() {
           <div className="flex flex-wrap items-center gap-2">
             <p className="inline-flex items-center gap-1.5 rounded-full border border-border bg-bg/60 px-2.5 py-1 text-xs font-medium text-primary">
               <Sparkles className="h-3.5 w-3.5" />
-              v2.1 · 官网专题迁移
+              v2.2 · 讲明白加厚版
             </p>
             {streak > 0 ? (
               <span className="rounded-full bg-surface-3 px-2.5 py-1 font-mono text-xs text-muted">
@@ -80,7 +80,7 @@ function HomePage() {
             系统学前端测试
           </h1>
           <p className="mt-3 max-w-xl text-base leading-relaxed text-muted">
-            现共 <strong className="text-fg">{LESSONS.length}</strong>{" "}
+            共 <strong className="text-fg">{LESSONS.length}</strong>{" "}
             节：从 Vitest llms.txt、Playwright 文档目录、RTL 指南与 Camoufox
             指纹章节迁移的专题均已入库——过滤/Tags、Codegen、POM、Clock、分片、axe、GeoIP…
           </p>

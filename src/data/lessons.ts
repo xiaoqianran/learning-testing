@@ -1,6 +1,7 @@
 import { EXTRA_LESSONS } from "./lessons-extra";
 import { MIGRATED_LESSONS } from "./lessons-migrated";
 import { CORE_LESSONS } from "./lessons-core";
+import { applyDeepContent } from "./lessons-deep";
 import type { Lesson, Track, QuizQuestion, DemoKind, LessonBlock } from "./lessons-types";
 
 export type { QuizQuestion, DemoKind, LessonBlock, Track, Lesson };
@@ -15,7 +16,6 @@ export const TRACKS: Track[] = [
   "工程化",
 ];
 
-/** 按路径合并：核心 → 扩展 → 官网迁移专题 */
 function mergeLessons(...groups: Lesson[][]): Lesson[] {
   const buckets = new Map<Track, Lesson[]>();
   for (const t of TRACKS) buckets.set(t, []);
@@ -30,11 +30,12 @@ function mergeLessons(...groups: Lesson[][]): Lesson[] {
   return TRACKS.flatMap((t) => buckets.get(t) ?? []);
 }
 
+/** 原始合并后，再套「讲明白」深加工 */
 export const LESSONS: Lesson[] = mergeLessons(
   CORE_LESSONS,
   EXTRA_LESSONS,
   MIGRATED_LESSONS,
-);
+).map(applyDeepContent);
 
 export function getLesson(slug: string) {
   return LESSONS.find((l) => l.slug === slug);

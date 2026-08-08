@@ -5,9 +5,11 @@ import {
   getLessonIndex,
   LESSONS,
 } from "@/data/lessons";
+import { DEEP_BY_SLUG } from "@/data/lessons-deep";
 import { CodeBlock } from "@/components/CodeBlock";
 import { InteractiveDemo } from "@/components/demos/InteractiveDemos";
 import { Quiz } from "@/components/Quiz";
+import { RichText } from "@/components/lesson/RichText";
 import { Button } from "@/components/ui/button";
 import { useProgress } from "@/store/progress";
 import {
@@ -17,7 +19,10 @@ import {
   BookmarkCheck,
   Check,
   Clock,
+  ExternalLink,
   Lightbulb,
+  Target,
+  AlertTriangle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -33,6 +38,7 @@ function LessonPage() {
     throw notFound();
   }
 
+  const deep = DEEP_BY_SLUG[slug];
   const idx = getLessonIndex(slug);
   const { prev, next } = getAdjacent(slug);
   const completed = useProgress((s) => s.completed);
@@ -104,21 +110,68 @@ function LessonPage() {
           </button>
         </div>
         <p className="mt-2 text-base text-muted">{lesson.summary}</p>
+
+        {deep?.objectives?.length ? (
+          <div className="mt-4 rounded-xl border border-primary/25 bg-primary-soft/60 p-4">
+            <p className="inline-flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-primary">
+              <Target className="h-3.5 w-3.5" />
+              学完应能
+            </p>
+            <ul className="mt-2 space-y-1.5">
+              {deep.objectives.map((o) => (
+                <li key={o} className="flex gap-2 text-sm text-fg">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  {o}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {deep?.official ? (
+          <a
+            href={deep.official}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 inline-flex items-center gap-1.5 text-xs text-primary no-underline hover:underline"
+          >
+            打开官方文档对照
+            <ExternalLink className="h-3 w-3" />
+          </a>
+        ) : null}
       </header>
 
       <div className="mt-8 space-y-8">
         {lesson.blocks.map((block, i) => {
           if (block.type === "text") {
+            const isPitfall = block.title?.includes("易错");
+            const isLearn = block.title?.includes("学会了");
+            const isProblem = block.title?.includes("讲明白");
             return (
-              <section key={i}>
+              <section
+                key={i}
+                className={cn(
+                  isPitfall &&
+                    "rounded-xl border border-warn/30 bg-warn/5 p-4 sm:p-5",
+                  isLearn &&
+                    "rounded-xl border border-primary/25 bg-primary-soft/40 p-4 sm:p-5",
+                  isProblem &&
+                    "rounded-xl border border-border bg-surface p-4 sm:p-5 shadow-soft",
+                )}
+              >
                 {block.title ? (
-                  <h2 className="mb-2 font-display text-lg font-semibold text-fg">
+                  <h2
+                    className={cn(
+                      "mb-3 flex items-center gap-2 font-display text-lg font-semibold text-fg",
+                    )}
+                  >
+                    {isPitfall ? (
+                      <AlertTriangle className="h-4 w-4 text-warn" />
+                    ) : null}
                     {block.title}
                   </h2>
                 ) : null}
-                <p className="whitespace-pre-line text-[15px] leading-relaxed text-muted">
-                  {block.body}
-                </p>
+                <RichText body={block.body} />
               </section>
             );
           }
@@ -139,7 +192,32 @@ function LessonPage() {
                 className="flex gap-3 rounded-lg border border-border bg-surface-2 px-4 py-3"
               >
                 <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                <p className="text-sm leading-relaxed text-muted">{block.body}</p>
+                <p className="text-sm leading-relaxed text-muted">
+                  {block.body.startsWith("官方对照") ||
+                  block.body.startsWith("http") ? (
+                    <>
+                      {block.body.includes("http") ? (
+                        <>
+                          {block.body.split("：")[0]}：
+                          <a
+                            href={
+                              block.body.match(/https?:\/\/\S+/)?.[0] ?? "#"
+                            }
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-primary underline-offset-2 hover:underline"
+                          >
+                            {block.body.match(/https?:\/\/\S+/)?.[0]}
+                          </a>
+                        </>
+                      ) : (
+                        block.body
+                      )}
+                    </>
+                  ) : (
+                    block.body
+                  )}
+                </p>
               </aside>
             );
           }
@@ -162,13 +240,15 @@ function LessonPage() {
 
       <section className="mt-10 rounded-xl border border-border bg-surface p-4 sm:p-5">
         <h2 className="font-display text-base font-semibold text-fg">本节笔记</h2>
-        <p className="mt-1 text-xs text-muted">自动保存在本机，仅你可见</p>
+        <p className="mt-1 text-xs text-muted">
+          建议记下：适用场景、最小例子、易错点。自动保存在本机。
+        </p>
         <textarea
           value={note}
           onChange={(e) => setNoteLocal(e.target.value)}
           onBlur={() => setNote(slug, note)}
           rows={4}
-          placeholder="记下重点、疑问或代码片段…"
+          placeholder="例如：POM 里只放动作，断言留在测试…"
           className="mt-3 w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm text-fg placeholder:text-subtle"
         />
       </section>
@@ -200,7 +280,7 @@ function LessonPage() {
                 <ArrowLeft className="h-3.5 w-3.5" />
                 上一节
               </p>
-              <p className="mt-1 font-medium text-fg">{prev.title}</p>
+              <p className="mt-1 text-sm font-medium text-fg">{prev.title}</p>
             </div>
           </Link>
         ) : (
@@ -217,17 +297,10 @@ function LessonPage() {
                 下一节
                 <ArrowRight className="h-3.5 w-3.5" />
               </p>
-              <p className="mt-1 font-medium text-fg">{next.title}</p>
+              <p className="mt-1 text-sm font-medium text-fg">{next.title}</p>
             </div>
           </Link>
-        ) : (
-          <Link to="/certificate" className="no-underline sm:text-right">
-            <div className="rounded-xl border border-primary/30 bg-primary-soft p-4">
-              <p className="text-xs text-primary">全部学完了？</p>
-              <p className="mt-1 font-medium text-fg">查看结业证明</p>
-            </div>
-          </Link>
-        )}
+        ) : null}
       </nav>
     </article>
   );
