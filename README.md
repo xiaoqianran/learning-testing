@@ -1,3 +1,12 @@
+# learning-testing
+
+交互式中文 **前端测试** 教程（Vitest / Testing Library / Playwright / Puppeteer）。
+
+- Vitest 官方 **有** [llms.txt](https://vitest.dev/llms.txt)；Playwright / RTL 暂无
+- 本站：[`/llms.txt`](https://xiaoqianran.github.io/learning-testing/llms.txt) · [`/llms-full.txt`](https://xiaoqianran.github.io/learning-testing/llms-full.txt)
+- UI：Catppuccin + 学/查/练/我 导航（与 learning-vue3 同构）
+- 部署：GitHub Actions → GitHub Pages
+
 # Learning Testing · 前端测试实战
 
 交互式中文测试教程：课程 + 测验 + 进度 + 断言沙盒 + 测试工坊。
