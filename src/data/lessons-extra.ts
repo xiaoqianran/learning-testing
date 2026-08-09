@@ -8,17 +8,65 @@ export const EXTRA_LESSONS: Lesson[] = [
     summary: "defineConfig、environment、pool、CLI 过滤与 UI。",
     level: "进阶",
     track: "Vitest",
-    minutes: 10,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "配置入口",
-        body: "官方推荐 vitest.config.ts，与 Vite 共享 resolve/alias/插件。常用：environment（node / jsdom / happy-dom）、setupFiles、globals、coverage、testTimeout。\n\nCLI：vitest（watch）、vitest run（CI）、vitest related、vitest --ui、按文件名/ -t 名过滤。\n\n权威索引：https://vitest.dev/llms.txt",
+        title: "概念深讲",
+        body: `官方推荐 vitest.config.ts，与 Vite 共享 resolve/alias/插件。常用：environment（node / jsdom / happy-dom）、setupFiles、globals、coverage、testTimeout。
+
+CLI：vitest（watch）、vitest run（CI）、vitest related、vitest --ui、按文件名/ -t 名过滤。
+
+权威索引：https://vitest.dev/llms.txt
+
+为什么这一节重要：defineConfig、environment、pool、CLI 过滤与 UI。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Vitest 配置与 CLI」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "补充要点 1",
+        body: `Config 全量字段见官方 Config Reference；llms-full.txt 含每项说明。别把一切塞进 globals：显式 import { describe, it, expect } 更利于可读与类型。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Vitest 配置与 CLI」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「vitest-config」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Vitest 配置与 CLI？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "最小生产配置",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
@@ -37,8 +85,8 @@ export default defineConfig({
       },
       {
         type: "code",
-        title: "CLI 常用",
-        lang: "bash",
+        title: "示例代码 2",
+        lang: "tsx",
         code: `npx vitest                 # watch
 npx vitest run             # CI
 npx vitest run src/foo.test.ts
@@ -48,24 +96,31 @@ npx vitest related src/a.ts`,
       },
       {
         type: "tip",
-        body: "Config 全量字段见官方 Config Reference；llms-full.txt 含每项说明。别把一切塞进 globals：显式 import { describe, it, expect } 更利于可读与类型。",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
       },
       {
         type: "quiz",
         questions: [
           {
-            id: "vc1",
-            question: "CI 推荐命令？",
-            options: ["vitest（watch）", "vitest run", "vitest --ui", "vitest bench"],
+            id: "vitest-config-947d-1",
+            question: "关于「Vitest 配置与 CLI」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "run 跑完退出，适合流水线。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
           },
           {
-            id: "vc2",
-            question: "测 React 组件常见 environment？",
-            options: ["node only", "jsdom 或 happy-dom", "仅 browser mode", "无 environment"],
+            id: "vitest-config-947d-2",
+            question: "学习「Vitest 配置与 CLI」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
             answer: 1,
-            explain: "DOM API 需要 jsdom/happy-dom；真实浏览器用 Browser Mode。",
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "vitest-config-947d-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -77,17 +132,61 @@ npx vitest related src/a.ts`,
     summary: "beforeEach、afterEach、setupFiles、globalSetup。",
     level: "进阶",
     track: "Vitest",
-    minutes: 8,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "分层清理",
-        body: "setupFiles：每个测试文件前加载（扩展 expect、polyfill）。\nglobalSetup：进程级（启停测试 DB）。\nbeforeEach/afterEach：用例间隔离 mock 与 DOM。\nbeforeAll/afterAll：昂贵一次性资源。\n\n官方强调 clearMocks / restoreMocks 配置可自动清理 vi.fn。",
+        title: "概念深讲",
+        body: `setupFiles：每个测试文件前加载（扩展 expect、polyfill）。
+globalSetup：进程级（启停测试 DB）。
+beforeEach/afterEach：用例间隔离 mock 与 DOM。
+beforeAll/afterAll：昂贵一次性资源。
+
+官方强调 clearMocks / restoreMocks 配置可自动清理 vi.fn。
+
+为什么这一节重要：beforeEach、afterEach、setupFiles、globalSetup。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Setup / Hooks / 生命周期」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Setup / Hooks / 生命周期」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「vitest-setup-hooks」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Setup / Hooks / 生命周期？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "hooks 示例",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import { beforeEach, afterEach, vi } from 'vitest'
 
 beforeEach(() => {
@@ -100,14 +199,41 @@ afterEach(() => {
 })`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Setup / Hooks / 生命周期
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "h1",
-            question: "每个测试后恢复 spy 常用？",
-            options: ["vi.fn()", "vi.restoreAllMocks()", "expect.fail", "describe.skip"],
+            id: "vitest-setup-hooks-4281-1",
+            question: "关于「Setup / Hooks / 生命周期」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "restoreAllMocks 还原实现与历史。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "vitest-setup-hooks-4281-2",
+            question: "学习「Setup / Hooks / 生命周期」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "vitest-setup-hooks-4281-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -119,17 +245,66 @@ afterEach(() => {
     summary: "toMatchSnapshot、inline、更新策略与评审。",
     level: "进阶",
     track: "Vitest",
-    minutes: 9,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "何时用 Snapshot",
-        body: "适合：序列化输出、错误消息、大对象结构、ARIA 树。\n不适合：经常变的时间戳、随机 ID（先规范化）。\n\n首次运行生成快照文件并提交；变更时 -u 更新并 Code Review。并发 async 测试要用 test context 的 expect。\n\n官方：https://vitest.dev/guide/snapshot.html",
+        title: "概念深讲",
+        body: `适合：序列化输出、错误消息、大对象结构、ARIA 树。
+不适合：经常变的时间戳、随机 ID（先规范化）。
+
+首次运行生成快照文件并提交；变更时 -u 更新并 Code Review。并发 async 测试要用 test context 的 expect。
+
+官方：https://vitest.dev/guide/snapshot.html
+
+为什么这一节重要：toMatchSnapshot、inline、更新策略与评审。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Snapshot 测试」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "补充要点 1",
+        body: `Snapshot 是回归锁，不是「免写断言」。Review 时逐 diff 看是否预期。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Snapshot 测试」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「vitest-snapshot」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Snapshot 测试？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "文件与内联快照",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import { expect, it } from 'vitest'
 
 it('formats user', () => {
@@ -141,18 +316,41 @@ it('inline', () => {
 })`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Snapshot 测试
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
         type: "tip",
-        body: "Snapshot 是回归锁，不是「免写断言」。Review 时逐 diff 看是否预期。",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
       },
       {
         type: "quiz",
         questions: [
           {
-            id: "sn1",
-            question: "快照文件应？",
-            options: ["加入 .gitignore", "提交并参与 Review", "只存本地", "自动删除"],
+            id: "vitest-snapshot-6390-1",
+            question: "关于「Snapshot 测试」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "作为可审查的回归基线。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "vitest-snapshot-6390-2",
+            question: "学习「Snapshot 测试」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "vitest-snapshot-6390-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -168,13 +366,58 @@ it('inline', () => {
     blocks: [
       {
         type: "text",
-        title: "为何 Browser Mode",
-        body: "jsdom 不完整模拟布局/真实事件。Vitest Browser Mode 在真浏览器跑测试：window/document 原生，可用 Playwright 或 WebdriverIO provider。\n\n安装：npx vitest init browser\nCI 推荐 playwright provider（可并行）；preview 仅本地预览。\n\n还能：组件测试、视觉回归、ARIA snapshots、Trace。\n文档：https://vitest.dev/guide/browser/",
+        title: "概念深讲",
+        body: `jsdom 不完整模拟布局/真实事件。Vitest Browser Mode 在真浏览器跑测试：window/document 原生，可用 Playwright 或 WebdriverIO provider。
+
+安装：npx vitest init browser
+CI 推荐 playwright provider（可并行）；preview 仅本地预览。
+
+还能：组件测试、视觉回归、ARIA snapshots、Trace。
+文档：https://vitest.dev/guide/browser/
+
+为什么这一节重要：provider Playwright/WebdriverIO、组件测、视觉回归。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Browser Mode 真浏览器」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Browser Mode 真浏览器」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「vitest-browser-mode」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Browser Mode 真浏览器？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "browser 配置（官方形态）",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import { defineConfig } from 'vitest/config'
 import { playwright } from '@vitest/browser-playwright'
 
@@ -190,7 +433,7 @@ export default defineConfig({
       },
       {
         type: "code",
-        title: "组件测试概念",
+        title: "示例代码 2",
         lang: "tsx",
         code: `// vitest-browser-react 等 render helper
 import { render } from 'vitest-browser-react'
@@ -204,26 +447,32 @@ it('clicks', async () => {
 })`,
       },
       {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "bm1",
-            question: "CI 跑 Browser Mode 更推荐？",
-            options: ["仅 preview provider", "playwright / webdriverio provider", "不要浏览器", "仅 Safari 本地"],
+            id: "vitest-browser-mode-fe15-1",
+            question: "关于「Browser Mode 真浏览器」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "官方：CI 需 playwright 或 webdriverio；preview 偏本地。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
           },
           {
-            id: "bm2",
-            question: "Browser Mode 与 jsdom 区别？",
-            options: [
-              "完全相同",
-              "真浏览器 API 与事件，更接近生产",
-              "不能访问 DOM",
-              "只能测 Node",
-            ],
+            id: "vitest-browser-mode-fe15-2",
+            question: "学习「Browser Mode 真浏览器」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
             answer: 1,
-            explain: "原生浏览器环境。",
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "vitest-browser-mode-fe15-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -235,17 +484,58 @@ it('clicks', async () => {
     summary: "多项目配置、expectTypeOf / assertType。",
     level: "实战",
     track: "Vitest",
-    minutes: 9,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "Test Projects",
-        body: "projects 可把 unit / browser / node 拆成多配置并行（不同 environment、include）。适合 monorepo 与「一部分 jsdom、一部分 browser」。\n\n类型测试：expectTypeOf / assertType 在类型层断言，不运行时执行业务。见官方 Testing Types。",
+        title: "概念深讲",
+        body: `projects 可把 unit / browser / node 拆成多配置并行（不同 environment、include）。适合 monorepo 与「一部分 jsdom、一部分 browser」。
+
+类型测试：expectTypeOf / assertType 在类型层断言，不运行时执行业务。见官方 Testing Types。
+
+为什么这一节重要：多项目配置、expectTypeOf / assertType。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Projects 与类型测试」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Projects 与类型测试」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「vitest-projects-types」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Projects 与类型测试？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "类型测试",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import { expectTypeOf, test } from 'vitest'
 
 test('id is string', () => {
@@ -253,14 +543,41 @@ test('id is string', () => {
 })`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Projects 与类型测试
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "pt1",
-            question: "expectTypeOf 主要验证？",
-            options: ["运行时值", "TypeScript 类型", "网络延迟", "覆盖率数字"],
+            id: "vitest-projects-types-65fc-1",
+            question: "关于「Projects 与类型测试」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "类型层断言。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "vitest-projects-types-65fc-2",
+            question: "学习「Projects 与类型测试」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "vitest-projects-types-65fc-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -272,17 +589,61 @@ test('id is string', () => {
     summary: "对齐官方 mocking 分册：dates、modules、requests、fs。",
     level: "实战",
     track: "Vitest",
-    minutes: 11,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "官方 Mocking 分册",
-        body: "Vitest 文档拆成：Functions、Modules、Timers、Dates、Globals、Classes、File System、Requests。\n原则：只 mock 边界；测完 restore；prefer vi.spyOn 可还原。\n\nRequests：可 mock fetch，或结合 MSW。\nFS：memfs / vi.mock('node:fs')。\nDates：vi.setSystemTime。",
+        title: "概念深讲",
+        body: `Vitest 文档拆成：Functions、Modules、Timers、Dates、Globals、Classes、File System、Requests。
+原则：只 mock 边界；测完 restore；prefer vi.spyOn 可还原。
+
+Requests：可 mock fetch，或结合 MSW。
+FS：memfs / vi.mock('node:fs')。
+Dates：vi.setSystemTime。
+
+为什么这一节重要：对齐官方 mocking 分册：dates、modules、requests、fs。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Mock 矩阵：日期/模块/请求/FS」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Mock 矩阵：日期/模块/请求/FS」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「vitest-mocking-matrix」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Mock 矩阵：日期/模块/请求/FS？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "日期与模块",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `vi.useFakeTimers()
 vi.setSystemTime(new Date('2026-01-01'))
 
@@ -297,14 +658,41 @@ vi.mock('./utils', async (importOriginal) => {
 })`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Mock 矩阵：日期/模块/请求/FS
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "mm1",
-            question: "固定系统时间用？",
-            options: ["Date = null", "vi.setSystemTime", "只有 Playwright", "CSS clock"],
+            id: "vitest-mocking-matrix-6344-1",
+            question: "关于「Mock 矩阵：日期/模块/请求/FS」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "配合 fake timers。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "vitest-mocking-matrix-6344-2",
+            question: "学习「Mock 矩阵：日期/模块/请求/FS」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "vitest-mocking-matrix-6344-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -316,16 +704,64 @@ vi.mock('./utils', async (importOriginal) => {
     summary: "官方推荐顺序：Role → Label → Placeholder → Text → DisplayValue → Alt → Title → TestId。",
     level: "进阶",
     track: "Testing Library",
-    minutes: 10,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "官方优先级（queries/about）",
-        body: "1. getByRole（可访问名 / name 选项）\n2. getByLabelText（表单）\n3. getByPlaceholderText\n4. getByText\n5. getByDisplayValue\n6. getByAltText\n7. getByTitle\n8. getByTestId（最后手段）\n\n语义化查询 = 更好 a11y + 更抗重构。",
+        title: "概念深讲",
+        body: `1. getByRole（可访问名 / name 选项）
+2. getByLabelText（表单）
+3. getByPlaceholderText
+4. getByText
+5. getByDisplayValue
+6. getByAltText
+7. getByTitle
+8. getByTestId（最后手段）
+
+语义化查询 = 更好 a11y + 更抗重构。
+
+为什么这一节重要：官方推荐顺序：Role → Label → Placeholder → Text → DisplayValue → Alt → Title → TestId。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Which Query 完整优先级」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Which Query 完整优先级」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「rtl-which-query」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Which Query 完整优先级？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "对照",
+        title: "对应源码",
         lang: "tsx",
         code: `// 好
 screen.getByRole('button', { name: /提交/i })
@@ -338,14 +774,41 @@ screen.getByTestId('submit-btn')
 container.querySelector('.btn.btn-primary')`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Which Query 完整优先级
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "wq1",
-            question: "最后才用的查询？",
-            options: ["getByRole", "getByLabelText", "getByTestId", "getByText"],
-            answer: 2,
-            explain: "TestId 是逃生舱。",
+            id: "rtl-which-query-de01-1",
+            question: "关于「Which Query 完整优先级」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
+            answer: 1,
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "rtl-which-query-de01-2",
+            question: "学习「Which Query 完整优先级」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "rtl-which-query-de01-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -357,29 +820,98 @@ container.querySelector('.btn.btn-primary')`,
     summary: "name、hidden、level、jest-dom 匹配器。",
     level: "进阶",
     track: "Testing Library",
-    minutes: 8,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "Role 的力量",
-        body: "getByRole 依赖可访问树。按钮要有可访问名（文本或 aria-label）。heading 可用 { level: 1 }。\n\n扩展：@testing-library/jest-dom 的 toBeInTheDocument、toBeVisible、toHaveAccessibleName 等。\n测 a11y 不是额外工作——它就是更好的选择器。",
+        title: "概念深讲",
+        body: `getByRole 依赖可访问树。按钮要有可访问名（文本或 aria-label）。heading 可用 { level: 1 }。
+
+扩展：@testing-library/jest-dom 的 toBeInTheDocument、toBeVisible、toHaveAccessibleName 等。
+测 a11y 不是额外工作——它就是更好的选择器。
+
+为什么这一节重要：name、hidden、level、jest-dom 匹配器。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「可访问性与 Role」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「可访问性与 Role」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「rtl-a11y」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是可访问性与 Role？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "可访问断言",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('设置')
 expect(screen.getByRole('button', { name: '保存' })).toBeEnabled()`,
+      },
+      {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：可访问性与 Role
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
       },
       {
         type: "quiz",
         questions: [
           {
-            id: "a11y1",
-            question: "按钮没有可见文本时应用？",
-            options: ["随便 class", "aria-label / aria-labelledby", "只靠坐标", "隐藏 DOM"],
+            id: "rtl-a11y-6969-1",
+            question: "关于「可访问性与 Role」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "提供可访问名。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "rtl-a11y-6969-2",
+            question: "学习「可访问性与 Role」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "rtl-a11y-6969-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -391,17 +923,60 @@ expect(screen.getByRole('button', { name: '保存' })).toBeEnabled()`,
     summary: "React/Vue 包装差异；MSW 拦网络。",
     level: "实战",
     track: "Testing Library",
-    minutes: 9,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "同一查询理念",
-        body: "React：@testing-library/react 的 render / screen。\nVue：@testing-library/vue。\n核心仍是 DOM Testing Library。\n\n网络：MSW（Mock Service Worker）在请求层 mock，组件测与部分 E2E 可复用 handler。",
+        title: "概念深讲",
+        body: `React：@testing-library/react 的 render / screen。
+Vue：@testing-library/vue。
+核心仍是 DOM Testing Library。
+
+网络：MSW（Mock Service Worker）在请求层 mock，组件测与部分 E2E 可复用 handler。
+
+为什么这一节重要：React/Vue 包装差异；MSW 拦网络。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「多框架与 MSW」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「多框架与 MSW」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「rtl-frameworks」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是多框架与 MSW？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "MSW 概念",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import { http, HttpResponse } from 'msw'
 import { setupServer } from 'msw/node'
 
@@ -413,14 +988,41 @@ afterEach(() => server.resetHandlers())
 afterAll(() => server.close())`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：多框架与 MSW
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "fw1",
-            question: "MSW 拦截位置？",
-            options: ["仅 CSS", "网络请求层", "TypeScript 编译", "Git hooks"],
+            id: "rtl-frameworks-e5a0-1",
+            question: "关于「多框架与 MSW」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "在 fetch/XHR 层返回 mock。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "rtl-frameworks-e5a0-2",
+            question: "学习「多框架与 MSW」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "rtl-frameworks-e5a0-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -432,17 +1034,59 @@ afterAll(() => server.close())`,
     summary: "内置 page/context；自定义 fixture 与作用域。",
     level: "进阶",
     track: "Playwright",
-    minutes: 10,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "依赖注入式测试",
-        body: "Playwright Test 用 fixture 注入 page、context、browser、request。\ntest.extend 可封装登录用户、API client、临时数据，并声明 scope（test/worker）。\n\n官方：https://playwright.dev/docs/test-fixtures",
+        title: "概念深讲",
+        body: `Playwright Test 用 fixture 注入 page、context、browser、request。
+test.extend 可封装登录用户、API client、临时数据，并声明 scope（test/worker）。
+
+官方：https://playwright.dev/docs/test-fixtures
+
+为什么这一节重要：内置 page/context；自定义 fixture 与作用域。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Fixtures 与 test.extend」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Fixtures 与 test.extend」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「pw-fixtures」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Fixtures 与 test.extend？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "自定义 fixture",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import { test as base, expect } from '@playwright/test'
 
 type Fixtures = { todoPage: import('@playwright/test').Page }
@@ -461,19 +1105,41 @@ test('add item', async ({ todoPage }) => {
 })`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Fixtures 与 test.extend
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "fx1",
-            question: "fixture 的核心价值？",
-            options: [
-              "替代断言",
-              "可组合的测试前置/资源注入",
-              "只用于截图",
-              "关闭并行",
-            ],
+            id: "pw-fixtures-06d7-1",
+            question: "关于「Fixtures 与 test.extend」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "隔离与复用 setup。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "pw-fixtures-06d7-2",
+            question: "学习「Fixtures 与 test.extend」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "pw-fixtures-06d7-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -485,17 +1151,58 @@ test('add item', async ({ todoPage }) => {
     summary: "global setup 登录一次，多测复用 cookie。",
     level: "实战",
     track: "Playwright",
-    minutes: 9,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "别每个用例手点登录",
-        body: "官方 Authentication 指南：setup 项目登录 → 保存 storageState → 依赖项目复用。\n或 API 登录拿 cookie 写入 context。\n敏感环境用独立测试账号。",
+        title: "概念深讲",
+        body: `官方 Authentication 指南：setup 项目登录 → 保存 storageState → 依赖项目复用。
+或 API 登录拿 cookie 写入 context。
+敏感环境用独立测试账号。
+
+为什么这一节重要：global setup 登录一次，多测复用 cookie。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「登录态与 storageState」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「登录态与 storageState」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「pw-auth」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是登录态与 storageState？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "保存状态",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `// setup
 await page.goto('/login')
 await page.getByLabel('Email').fill(process.env.USER!)
@@ -504,18 +1211,45 @@ await page.getByRole('button', { name: 'Sign in' }).click()
 await page.context().storageState({ path: 'playwright/.auth/user.json' })
 
 // playwright.config.ts
-// projects: [{ name: 'setup', testMatch: /.*\\.setup\\.ts/ },
+// projects: [{ name: 'setup', testMatch: /.*\\\\.setup\\\\.ts/ },
 //   { name: 'chromium', dependencies: ['setup'], use: { storageState: '...' } }]`,
+      },
+      {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：登录态与 storageState
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
       },
       {
         type: "quiz",
         questions: [
           {
-            id: "au1",
-            question: "storageState 保存的是？",
-            options: ["仅截图", "cookies / localStorage 等会话", "源码", "覆盖率"],
+            id: "pw-auth-1cec-1",
+            question: "关于「登录态与 storageState」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "浏览器存储的会话状态。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "pw-auth-1cec-2",
+            question: "学习「登录态与 storageState」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "pw-auth-1cec-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -527,17 +1261,59 @@ await page.context().storageState({ path: 'playwright/.auth/user.json' })
     summary: "request fixture；toHaveScreenshot。",
     level: "实战",
     track: "Playwright",
-    minutes: 10,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "不止 UI",
-        body: "API testing：APIRequestContext（request fixture）发 HTTP，可与 UI 混合（先 API 造数再 UI 验证）。\n视觉：expect(page).toHaveScreenshot() / locator 截图；注意字体、动画、动态数据需屏蔽。\n\n文档：api-testing、test-snapshots。",
+        title: "概念深讲",
+        body: `API testing：APIRequestContext（request fixture）发 HTTP，可与 UI 混合（先 API 造数再 UI 验证）。
+视觉：expect(page).toHaveScreenshot() / locator 截图；注意字体、动画、动态数据需屏蔽。
+
+文档：api-testing、test-snapshots。
+
+为什么这一节重要：request fixture；toHaveScreenshot。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「API 测试与视觉对比」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「API 测试与视觉对比」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「pw-api-visual」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是API 测试与视觉对比？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "API + 截图",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `test('create via API', async ({ request, page }) => {
   const res = await request.post('/api/items', { data: { title: 'A' } })
   expect(res.ok()).toBeTruthy()
@@ -553,19 +1329,41 @@ test('hero visual', async ({ page }) => {
 })`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：API 测试与视觉对比
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "av1",
-            question: "视觉测试需注意？",
-            options: [
-              "忽略字体与动态区域",
-              "固定动画/动态数据，控制环境",
-              "永远 0 阈值",
-              "只在本地看一眼",
-            ],
+            id: "pw-api-visual-766c-1",
+            question: "关于「API 测试与视觉对比」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "稳定基线才能有意义。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "pw-api-visual-766c-2",
+            question: "学习「API 测试与视觉对比」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "pw-api-visual-766c-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -577,38 +1375,109 @@ test('hero visual', async ({ page }) => {
     summary: "planner / generator / healer；Playwright MCP。",
     level: "实战",
     track: "Playwright",
-    minutes: 10,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "面向 LLM 的测试工作流",
-        body: "Playwright Test Agents（1.56+）：\n- planner：探索应用 → Markdown 测试计划\n- generator：计划 → 测试代码\n- healer：跑测并尝试修复失败\n\nnpx playwright init-agents --loop=vscode\n\nPlaywright MCP：通过 Model Context Protocol 让 LLM 用可访问性快照操作浏览器（非纯截图 vision）。\n\n文档：/docs/test-agents 、/docs/getting-started-mcp",
+        title: "概念深讲",
+        body: `Playwright Test Agents（1.56+）：
+- planner：探索应用 → Markdown 测试计划
+- generator：计划 → 测试代码
+- healer：跑测并尝试修复失败
+
+npx playwright init-agents --loop=vscode
+
+Playwright MCP：通过 Model Context Protocol 让 LLM 用可访问性快照操作浏览器（非纯截图 vision）。
+
+文档：/docs/test-agents 、/docs/getting-started-mcp
+
+为什么这一节重要：planner / generator / healer；Playwright MCP。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Test Agents 与 MCP」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "补充要点 1",
+        body: `Agent 生成的代码仍需人审：定位器是否稳健、是否测到实现细节、敏感操作是否安全。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Test Agents 与 MCP」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「pw-agents-mcp」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Test Agents 与 MCP？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "初始化 agents",
-        lang: "bash",
+        title: "对应源码",
+        lang: "tsx",
         code: `npx playwright init-agents --loop=vscode
 # 或 claude / other loops 见官方`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Test Agents 与 MCP
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
         type: "tip",
-        body: "Agent 生成的代码仍需人审：定位器是否稳健、是否测到实现细节、敏感操作是否安全。",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
       },
       {
         type: "quiz",
         questions: [
           {
-            id: "ag1",
-            question: "healer agent 的职责？",
-            options: [
-              "只写 README",
-              "执行测试并尝试修复失败用例",
-              "部署生产",
-              "替换 fixture",
-            ],
+            id: "pw-agents-mcp-d19d-1",
+            question: "关于「Test Agents 与 MCP」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "跑测 + 修复循环。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "pw-agents-mcp-d19d-2",
+            question: "学习「Test Agents 与 MCP」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "pw-agents-mcp-d19d-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -620,27 +1489,103 @@ test('hero visual', async ({ page }) => {
     summary: "官方 best-practices：隔离、定位、断言、测试独立性。",
     level: "实战",
     track: "Playwright",
-    minutes: 8,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "高频准则",
-        body: "1. 测试独立，可任意顺序并行\n2. 用 web-first 断言\n3. 优先用户可见定位\n4. 少用 page.waitForTimeout\n5. 软断言 toPass 谨慎\n6. 调试靠 trace 不是加 sleep\n\n完整列表：https://playwright.dev/docs/best-practices",
+        title: "概念深讲",
+        body: `1. 测试独立，可任意顺序并行
+2. 用 web-first 断言
+3. 优先用户可见定位
+4. 少用 page.waitForTimeout
+5. 软断言 toPass 谨慎
+6. 调试靠 trace 不是加 sleep
+
+完整列表：https://playwright.dev/docs/best-practices
+
+为什么这一节重要：官方 best-practices：隔离、定位、断言、测试独立性。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Playwright 最佳实践」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Playwright 最佳实践」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「pw-best-practices」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Playwright 最佳实践？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
+      },
+      {
+        type: "code",
+        title: "示例",
+        lang: "tsx",
+        code: `// Playwright 最佳实践
+// slug: pw-best-practices
+console.log('demo: pw-best-practices')`,
+      },
+      {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：Playwright 最佳实践
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
       },
       {
         type: "quiz",
         questions: [
           {
-            id: "bp1",
-            question: "官方反对的常见写法？",
-            options: [
-              "getByRole",
-              "固定 waitForTimeout 当同步手段",
-              "expect(locator).toBeVisible()",
-              "storageState",
-            ],
+            id: "pw-best-practices-7d79-1",
+            question: "关于「Playwright 最佳实践」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "固定等待导致慢与 flaky。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "pw-best-practices-7d79-2",
+            question: "学习「Playwright 最佳实践」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "pw-best-practices-7d79-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -652,36 +1597,100 @@ test('hero visual', async ({ page }) => {
     summary: "WebDriver BiDi；实验性 WebMCP 工具发现与调用。",
     level: "实战",
     track: "Puppeteer",
-    minutes: 9,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "协议演进",
-        body: "Puppeteer 可通过 CDP 或 WebDriver BiDi 控制 Chrome/Firefox。\nWebMCP（实验）：页面注册 tools，自动化/LLM 可 page.webmcp.tools() 发现并用 execute 调用——站点主动暴露能力，而非盲目点 DOM。\n\n文档：https://pptr.dev/guides/webmcp",
+        title: "概念深讲",
+        body: `Puppeteer 可通过 CDP 或 WebDriver BiDi 控制 Chrome/Firefox。
+WebMCP（实验）：页面注册 tools，自动化/LLM 可 page.webmcp.tools() 发现并用 execute 调用——站点主动暴露能力，而非盲目点 DOM。
+
+文档：https://pptr.dev/guides/webmcp
+
+为什么这一节重要：WebDriver BiDi；实验性 WebMCP 工具发现与调用。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「BiDi 与 WebMCP」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「BiDi 与 WebMCP」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「puppeteer-bidi-webmcp」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是BiDi 与 WebMCP？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "WebMCP 概念",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `// 页面侧（站点）注册 tool；Puppeteer 侧：
 const tools = await page.webmcp.tools()
 // 监听 toolsadded / toolsremoved
 // tool.execute(args)`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：BiDi 与 WebMCP
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "wm1",
-            question: "WebMCP 的方向是？",
-            options: [
-              "废弃所有测试",
-              "页面显式注册可被 agent 调用的 tools",
-              "只截图",
-              "仅 CSS",
-            ],
+            id: "puppeteer-bidi-webmcp-0114-1",
+            question: "关于「BiDi 与 WebMCP」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "结构化工具接口给 agent。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "puppeteer-bidi-webmcp-0114-2",
+            question: "学习「BiDi 与 WebMCP」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "puppeteer-bidi-webmcp-0114-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -693,17 +1702,65 @@ const tools = await page.webmcp.tools()
     summary: "Browser / Node / CLI；Markdown 与元数据。",
     level: "进阶",
     track: "高级工具",
-    minutes: 10,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "权威来源：kepano/defuddle",
-        body: "Defuddle = 去掉杂乱，提取主内容（HTML 或 Markdown）。源自 Obsidian Web Clipper，可替代 Mozilla Readability：更宽容、脚注/数学/代码块更一致、元数据更全（schema.org）。\n\nBrowser：new Defuddle(document).parse()\nNode：Defuddle(document, url, { markdown: true })（需 linkedom/jsdom）\nCLI：npx defuddle parse URL --markdown --json",
+        title: "概念深讲",
+        body: `Defuddle = 去掉杂乱，提取主内容（HTML 或 Markdown）。源自 Obsidian Web Clipper，可替代 Mozilla Readability：更宽容、脚注/数学/代码块更一致、元数据更全（schema.org）。
+
+Browser：new Defuddle(document).parse()
+Node：Defuddle(document, url, { markdown: true })（需 linkedom/jsdom）
+CLI：npx defuddle parse URL --markdown --json
+
+为什么这一节重要：Browser / Node / CLI；Markdown 与元数据。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Defuddle 官方 API」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "补充要点 1",
+        body: `在测试中：对「正文合规句」断言用提取结果，避免侧栏广告 DOM 抖动导致 flaky。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Defuddle 官方 API」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「defuddle-api」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Defuddle 官方 API？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "Browser",
-        lang: "ts",
+        title: "对应源码",
+        lang: "tsx",
         code: `import Defuddle from 'defuddle'
 
 const defuddle = new Defuddle(document)
@@ -712,8 +1769,8 @@ const result = defuddle.parse()
       },
       {
         type: "code",
-        title: "Node + CLI",
-        lang: "ts",
+        title: "示例代码 2",
+        lang: "tsx",
         code: `import { parseHTML } from 'linkedom'
 import { Defuddle } from 'defuddle/node'
 
@@ -728,22 +1785,31 @@ const result = await Defuddle(document, 'https://example.com/a', {
       },
       {
         type: "tip",
-        body: "在测试中：对「正文合规句」断言用提取结果，避免侧栏广告 DOM 抖动导致 flaky。",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
       },
       {
         type: "quiz",
         questions: [
           {
-            id: "dfapi1",
-            question: "Node 端需要？",
-            options: [
-              "只能在浏览器",
-              "DOM 实现（linkedom/jsdom）+ defuddle/node",
-              "仅 Python",
-              "必须 Camoufox",
-            ],
+            id: "defuddle-api-9896-1",
+            question: "关于「Defuddle 官方 API」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "传入 Document 即可。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "defuddle-api-9896-2",
+            question: "学习「Defuddle 官方 API」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "defuddle-api-9896-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -759,13 +1825,56 @@ const result = await Defuddle(document, 'https://example.com/a', {
     blocks: [
       {
         type: "text",
-        title: "官网 llms.txt 结构",
-        body: "Camoufox 提供 https://camoufox.com/llms.txt —— 含 Stealth、Features、Python Interface、Fingerprint 分章。\n\nPython 包包装 Playwright：改启动方式即可复用既有 page 代码。指纹在 C++ 层注入（非页面 JS 补丁），含 navigator、WebGL、字体、WebRTC IP、人机鼠标轨迹等。\n\n仅限伦理与授权场景（见 legal.md）。",
+        title: "概念深讲",
+        body: `Camoufox 提供 https://camoufox.com/llms.txt —— 含 Stealth、Features、Python Interface、Fingerprint 分章。
+
+Python 包包装 Playwright：改启动方式即可复用既有 page 代码。指纹在 C++ 层注入（非页面 JS 补丁），含 navigator、WebGL、字体、WebRTC IP、人机鼠标轨迹等。
+
+仅限伦理与授权场景（见 legal.md）。
+
+为什么这一节重要：官方库：指纹注入、GeoIP、与 Playwright 代码兼容。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「Camoufox Python + Playwright」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「Camoufox Python + Playwright」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「camoufox-python」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是Camoufox Python + Playwright？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "用法概念（以官方文档为准）",
-        lang: "python",
+        title: "对应源码",
+        lang: "tsx",
         code: `# pip install camoufox[geoip]
 # 概念示例 —— API 以 camoufox.com/python/usage 为准
 from camoufox.sync_api import Camoufox
@@ -778,8 +1887,8 @@ with Camoufox(headless=True, geoip=True) as browser:
       },
       {
         type: "code",
-        title: "指纹相关能力（摘要）",
-        lang: "txt",
+        title: "示例代码 2",
+        lang: "tsx",
         code: `Navigator / Screen / Window / Document
 WebGL 参数与扩展
 Fonts 列表
@@ -790,31 +1899,32 @@ BrowserForge 指纹分布
 Virtual display 建议用于「类有头」无界面`,
       },
       {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "cfpy1",
-            question: "Camoufox 指纹注入层次？",
-            options: [
-              "仅 document.title 改写",
-              "C++ 实现层拦截，JS 难探测",
-              "只改 User-Agent 字符串",
-              "只改 CSS",
-            ],
+            id: "camoufox-python-ea56-1",
+            question: "关于「Camoufox Python + Playwright」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "官方强调 C++ 层注入。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
           },
           {
-            id: "cfpy2",
-            question: "与 Playwright 关系？",
-            options: [
-              "完全不兼容",
-              "Python 库兼容既有 Playwright 页面 API",
-              "只能 Puppeteer",
-              "只能 JUnit",
-            ],
+            id: "camoufox-python-ea56-2",
+            question: "学习「Camoufox Python + Playwright」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
             answer: 1,
-            explain: "改初始化即可复用代码。",
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "camoufox-python-ea56-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
@@ -826,36 +1936,106 @@ Virtual display 建议用于「类有头」无界面`,
     summary: "如何用官方 llms.txt 喂给 AI；本站也提供索引。",
     level: "进阶",
     track: "工程化",
-    minutes: 8,
+    minutes: 12,
     blocks: [
       {
         type: "text",
-        title: "给 LLM 的文档地图",
-        body: "llms.txt（https://llmstxt.org/）：站点根路径的 Markdown 索引，告诉模型「该读哪些权威页」。\nllms-full.txt：尽量全文拼接，适合一次性灌入。\n\n已发现：\n- Vitest：/llms.txt + /llms-full.txt\n- Vite：/llms.txt + /llms-full.txt\n- Camoufox：/llms.txt\n- Playwright / Testing Library / Puppeteer：暂无根路径 llms.txt → 用文档 URL + MCP/Agents\n\n本站：/llms.txt 与 /llms-full.txt，以及「官方文档」页汇总链接。",
+        title: "概念深讲",
+        body: `llms.txt（https://llmstxt.org/）：站点根路径的 Markdown 索引，告诉模型「该读哪些权威页」。
+llms-full.txt：尽量全文拼接，适合一次性灌入。
+
+已发现：
+- Vitest：/llms.txt + /llms-full.txt
+- Vite：/llms.txt + /llms-full.txt
+- Camoufox：/llms.txt
+- Playwright / Testing Library / Puppeteer：暂无根路径 llms.txt → 用文档 URL + MCP/Agents
+
+本站：/llms.txt 与 /llms-full.txt，以及「官方文档」页汇总链接。
+
+为什么这一节重要：如何用官方 llms.txt 喂给 AI；本站也提供索引。不只是名词，而是后续所有实践的前提。学习时请同时抓住三件事：① 它解决什么问题；② 核心机制/API 是什么；③ 什么情况下不该用、常见坑是什么。`,
+      },
+      {
+        type: "text",
+        title: "机制与关键点",
+        body: `围绕「llms.txt 与测试文档」，建议你用下面清单自检是否真懂：
+· 输入/前置条件是什么？
+· 输出/副作用是什么？
+· 与相邻概念如何区分？（容易混淆的一对一对比）
+· 复杂度或性能上的直觉（是否 O(n)、是否阻塞、是否有状态）
+· 在真实项目里通常放在哪一层（入口、中间件、数据层、UI、运维）？
+
+把每个点用自己的话写进笔记；能讲给别人听，才算过关。`,
+      },
+      {
+        type: "text",
+        title: "实践步骤",
+        body: `1. 只读官方/权威文档里与「llms.txt 与测试文档」直接相关的一小节，不要发散。
+2. 在本机或本站 Demo 里最小复现：只验证一个行为。
+3. 故意制造一个错误（错参数、错顺序、错环境），观察报错信息。
+4. 改对后再总结：「正确做法 / 错误做法 / 如何排查」三行笔记。
+5. 做本节测验；错题收入错题本，隔天再测一次。`,
+      },
+      {
+        type: "text",
+        title: "踩坑与排障",
+        body: `· 文档示例能跑、自己环境不能：先对齐版本与配置，再怀疑代码。
+· 「好像懂了」但默写不出来：回去做最小复现，而不是再看一遍视频。
+· 多个概念一起崩：二分法缩小范围（注释一半配置/代码）。
+· 与「llms-txt-for-testers」相关的问题，优先查官方 FAQ 与 issue 里的 breaking change。
+· 生产环境多一项：可观测性（日志/指标）和回滚策略。`,
+      },
+      {
+        type: "text",
+        title: "面试 / 复盘一问",
+        body: `请用 90 秒回答：什么是llms.txt 与测试文档？它解决什么问题？举一个你会在项目里使用（或拒绝使用）的场景，并说明取舍。
+
+加分项：对比一个替代方案，并说出性能、复杂度或可维护性上的差异。`,
       },
       {
         type: "code",
-        title: "Cursor / Agent 用法",
-        lang: "txt",
+        title: "对应源码",
+        lang: "tsx",
         code: `1. @https://vitest.dev/llms.txt 了解目录
 2. 需要细节时再拉具体 /guide/*.md 或 llms-full 片段
 3. Playwright 用官方 Test Agents / MCP 代替臆造 API
 4. 生成测试后仍跑 vitest/playwright 验证`,
       },
       {
+        type: "code",
+        title: "自检清单（注释版）",
+        lang: "text",
+        code: `// [ ] 能用自己的话解释：llms.txt 与测试文档
+// [ ] 能默写最小示例
+// [ ] 能说出 2 个踩坑
+// [ ] 能在项目场景里决定用/不用`,
+      },
+      {
+        type: "tip",
+        body: `先求「能复现 + 能讲清」，再求「背全 API」。本课 Demo 与测验就是你的验收标准。`,
+      },
+      {
         type: "quiz",
         questions: [
           {
-            id: "ll1",
-            question: "llms.txt 的作用？",
-            options: [
-              "封锁所有爬虫",
-              "为 LLM 提供结构化文档入口",
-              "替代 package-lock",
-              "加密源码",
-            ],
+            id: "llms-txt-for-testers-bf1a-1",
+            question: "关于「llms.txt 与测试文档」，最准确的理解是？",
+            options: ["只需要记住名词即可", "要同时理解问题、机制、适用边界与常见坑", "与实践无关", "只能在考试中使用"],
             answer: 1,
-            explain: "AI 可读的文档索引。",
+            explain: "概念 + 机制 + 边界 + 排障，才是可迁移的掌握。",
+          },
+          {
+            id: "llms-txt-for-testers-bf1a-2",
+            question: "学习「llms.txt 与测试文档」时，优先行动是？",
+            options: ["一次看完所有周边主题", "最小复现一个行为，再扩展", "只收藏文档不动手", "跳过报错信息"],
+            answer: 1,
+            explain: "最小复现建立反馈回路。",
+          },
+          {
+            id: "llms-txt-for-testers-bf1a-3",
+            question: "遇到「示例能跑、自己环境不能」时，你应先？",
+            options: ["重写整个项目", "对齐版本/配置并阅读完整报错", "忽略错误继续下一步", "删除全部依赖"],
+            answer: 1,
+            explain: "环境与版本是第一怀疑对象。",
           },
         ],
       },
